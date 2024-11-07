@@ -109,10 +109,28 @@ void onButtonR2Changed(State state) {
   }
 }
 
+bool pistonExtend = false;
+
+void onButtonL1Changed(State state) {
+  if(state & Press) {
+    if(pistonExtend == false)
+    {
+      pistonA.open();
+      pistonExtend = true;
+    }
+    else
+    {
+      pistonA.close();
+      pistonExtend = false;
+    }
+  }
+}
+
 void usercontrol(void) {
 
   BUTTON_HELPER(R1);
   BUTTON_HELPER(R2);
+  BUTTON_HELPER(L1);
   // User control code here, inside the loop
   while (1) {
     // This is the main execution loop for the user control program.
@@ -142,7 +160,7 @@ void printThreadRunner() {
     //printf("rotation: %f degrees\n", imu.rotation(rotationUnits::deg));
     //printf("imu.calibrating: %d\n", imu.isCalibrating());
     //printf("gyro: %f\n", imu.gyroRate(axisType::xaxis, velocityUnits::dps));
-    //printf("%f\n",arm.position(deg));
+    printf("%f\n",arm.position(deg));
     wait(.5, seconds);
   }
 }

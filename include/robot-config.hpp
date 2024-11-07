@@ -35,11 +35,14 @@ extern motor frontRight;
 
 extern motor conveyor;
 extern motor arm;
+extern pneumatics pistonA;
+extern pneumatics pistonB;
 
 extern inertial imu;
 
 extern motor_group leftMotors;
 extern motor_group rightMotors;
+
 
 typedef enum {
     Retracted=0,

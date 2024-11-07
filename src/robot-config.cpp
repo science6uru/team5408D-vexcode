@@ -33,6 +33,9 @@ motor frontRight = motor(PORT12, gearSetting::ratio6_1, false);
 motor conveyor = motor(PORT2, gearSetting::ratio6_1, false);
 motor arm = motor(PORT10, gearSetting::ratio36_1, false);
 
+pneumatics pistonA = pneumatics(Brain.ThreeWirePort.A);
+pneumatics pistonB = pneumatics(Brain.ThreeWirePort.B);
+
 inertial imu = inertial(PORT11, turnType::right);
 
 motor_group leftMotors = motor_group(/*backLeft,*/ frontLeft);
