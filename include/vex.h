@@ -10,7 +10,7 @@
 #include "v5.h"
 #include "v5_vcs.h"
 
-//#define MOTOR_CONFIG_D
+#define MOTOR_CONFIG_D
 
 
 #define waitUntil(condition)                                                   \

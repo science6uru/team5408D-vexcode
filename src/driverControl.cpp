@@ -19,7 +19,7 @@ int t = 18; //turningCurve --> change to adjust sensitivity of turning
 int d = 2; //drivingCurve --> change to adjust sensitivity of forward / backward movement
 
 
-float defaultDriveCurve(float x, float scale) {
+float defaultDriveCurve(float x) {
     float a = -2.2f;
     float b = 303.0f;
     float c = 1.8f;
@@ -44,13 +44,17 @@ float defaultDriveCurve(float x, float scale) {
 }
 
 
-
-
-
 void switchArm(ArmPosition id) {
 
     printf("%d\n", id);
     arm.spinToPosition(armPositions[id], deg, false);
+}
+
+void driveConveyor(bool id) {
+    if(id)
+        conveyor.spin(forward, 100, percent);
+    else
+        conveyor.spin(forward, 0, percent);
 }
 
 void setDriveMotors(double lefty, double rightx, double rot) {
@@ -81,6 +85,6 @@ void setDriveMotors(double lefty, double rightx, double rot) {
 
     // leftMotors.setVelocity(defaultDriveCurve(left_stick_smoothed, 4), percent);
     // rightMotors.setVelocity(defaultDriveCurve(left_stick_smoothed, 4), percent);
-    leftMotors.setVelocity(left_stick_smoothed + right_stick_smoothed, percent);
-    rightMotors.setVelocity(left_stick_smoothed - right_stick_smoothed, percent);
+    leftMotors.setVelocity(defaultDriveCurve(left_stick_smoothed) + defaultDriveCurve(right_stick_smoothed), percent);
+    rightMotors.setVelocity(defaultDriveCurve(left_stick_smoothed) - defaultDriveCurve(right_stick_smoothed), percent);
 }

@@ -38,10 +38,11 @@ void initialize() {
   printf("initialize\n");
   setupDriveMotors(leftMotors);
   setupDriveMotors(rightMotors);
+  setupConveyorMotor(conveyor);
   setupArmMotor(arm);
-  imu.calibrate(3);
+  imu.calibrate(2);
   while(imu.isCalibrating()) {
-    printf("calibrating\n");
+    printf("calibrating IMU\n");
     wait(200, timeUnits::msec);
   }
   imu.resetRotation();
@@ -77,14 +78,14 @@ void autonomous(void) {
 
 ArmPosition id = Retracted;
 
-void onButtonR1Changed(State state) {
-  if(state == 9) {
+void onButtonL1Changed(State state) {
+  if(state == DoubleClick) {
     id = (ArmPosition)(NUM_ARM_POSITIONS - 1);
     switchArm(id);
-    printf("    double clicked %d\n", id);
+    printf("double clicked %d\n", id);
   }
   else if(state == Click) {
-    printf("    clicked %d\n", id);
+    printf("clicked %d\n", id);
     if((id + 1) < NUM_ARM_POSITIONS) {
       id = (ArmPosition)(id + 1);
       switchArm((ArmPosition)id);
@@ -93,25 +94,25 @@ void onButtonR1Changed(State state) {
   printf("%d\n", id);
 }
 
-void onButtonR2Changed(State state) {
-  printf("  state %d\n", state);
-  if(state == 9) {
+void onButtonL2Changed(State state) {
+  printf("state %d\n", state);
+  if(state == DoubleClick) {
     id = Retracted;
     switchArm(id);
-    printf("    double clicked %d\n", id);
+    printf("double clicked %d\n", id);
   }
   else if(state == Click) {
     if((id - 1) < NUM_ARM_POSITIONS) {
       id = (ArmPosition)(id - 1);
       switchArm((ArmPosition)id);
     }
-    printf("    clicked %d\n", id);
+    printf("clicked %d\n", id);
   }
 }
 
 bool pistonExtend = false;
 
-void onButtonL1Changed(State state) {
+void onButtonAChanged(State state) {
   if(state & Press) {
     if(pistonExtend == false)
     {
@@ -126,13 +127,27 @@ void onButtonL1Changed(State state) {
   }
 }
 
+void onButtonR1Changed(State state) {
+    printf("State: %d\n", state);
+  if(state & Press) {
+    driveConveyor(true);
+  }
+  else if(state & Release)
+  {
+    driveConveyor(false);
+  }
+}
+
 void usercontrol(void) {
 
-  BUTTON_HELPER(R1);
-  BUTTON_HELPER(R2);
   BUTTON_HELPER(L1);
+  BUTTON_HELPER(L2);
+  BUTTON_HELPER(A);
+  BUTTON_HELPER(R1);
   // User control code here, inside the loop
   while (1) {
+
+    //conveyor.setVelocity(100, percent);
     // This is the main execution loop for the user control program.
     // Each time through the loop your program should update motor + servo
     // values based on feedback from the joysticks.
@@ -160,8 +175,8 @@ void printThreadRunner() {
     //printf("rotation: %f degrees\n", imu.rotation(rotationUnits::deg));
     //printf("imu.calibrating: %d\n", imu.isCalibrating());
     //printf("gyro: %f\n", imu.gyroRate(axisType::xaxis, velocityUnits::dps));
-    printf("%f\n",arm.position(deg));
-    wait(.5, seconds);
+    printf("Arm Degree%f\n",arm.position(deg));
+    wait(.25, seconds);
   }
 }
 

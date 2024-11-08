@@ -4,5 +4,6 @@
 
 void setDriveMotors(double lefty, double rightx, double rot);
 void switchArm(ArmPosition id);
+void driveConveyor(bool id);
 
 #endif
